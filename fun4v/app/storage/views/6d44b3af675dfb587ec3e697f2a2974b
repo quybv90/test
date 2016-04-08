@@ -1,0 +1,27 @@
+<article class="post clearfix">
+<div class="panel-heading" contenteditable="false" style="background-color: #ABA8A8;"><?php echo Lang::get("posts.may_you_also_like"); ?></div>
+<div class="panel-body">
+  <div class="row">
+    <?php foreach($hot_images as $post): ?>
+    <div class="col-md-4">
+      <div class="thumbnail">
+        <a href="<?php echo route('post_show', ['slug' => Str::slug($post->title), 'id' => $post->id]); ?>">
+          <?php if($post->category == "photo"): ?>
+          <img src="<?php echo ViewHelper::getFirstImage($post->content); ?>" alt="<?php echo $post->title; ?>" id="<?php echo $post->title; ?>" style="width: 240px; height: 174px;"/>
+          <?php elseif($post->category == "video"): ?>
+          <img src="<?php echo ViewHelper::mqThumbVideo($post->content); ?>" alt="<?php echo $post->title; ?>" id="<?php echo $post->title; ?>" style="width: 240px; height: 174px;"/>
+          <?php endif; ?>
+        </a>
+        <!-- <img alt="300x200" src="http://lorempixel.com/600/200/people"> -->
+        <div class="caption">
+          <span class="glyphicon glyphicon-eye-open post-view"><?php echo $post->total_views(); ?></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <span class="glyphicon glyphicon-comment post-view"><span class="fb-comments-count" data-href="<?php echo $post->url; ?>"></span></span>
+          <p>
+            <h6 class="ellipsis"><?php echo link_to_route('post_show', $post->title, ['slug' => Str::slug($post->title), 'id' => $post->id]); ?></h6>
+          </p>
+        </div>
+      </div>
+    </div>
+    <?php endforeach; ?>
+  </div>
+</article>

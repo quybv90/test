@@ -1,0 +1,92 @@
+<?php $__env->startSection('content'); ?>
+<h3>Edit User</h3>
+<?php echo Form::model($user, array('method' => 'PATCH', 'route' =>
+ array('admin.users.update', $user->id))); ?>
+
+  <table class="table">
+    <tr>
+        <td>
+            <?php echo Form::label('name', 'Name:'); ?>
+
+        </td>
+        <td>
+            <div class="col-sm-8">
+            <?php echo Form::text('name', $user->name, array('class' => 'form-control')); ?>
+
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <?php echo Form::label('email', 'Email:'); ?>
+
+        </td>
+        <td>
+            <div class="col-sm-8">
+                <?php echo Form::text('email', $user->email, array('class' => 'form-control')); ?>
+
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <?php echo Form::label('type', 'Type:'); ?>
+
+        </td>
+        <td>
+            <div class="col-sm-8">
+                <?php echo Form::select('type', array('Visitor'=>'Visitor', 'Boxae'=>'Boxae', 'Admin'=>'Admin'),$user->type, array('class' => 'form-control')); ?>
+
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <?php echo Form::label('status', 'Status:'); ?>
+
+        </td>
+        <td>
+            <div class="col-sm-8">
+                <?php echo Form::select('status', array('Nomal'=>'Nomal', 'Ban'=>'Ban'),$user->status, array('class' => 'form-control')); ?>
+
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <!-- <?php echo Form::label('password', 'Password:'); ?> -->
+        </td>
+        <td>
+            <div class="col-sm-8">
+                <!-- <?php echo Form::password('password', array('class' => 'form-control')); ?> -->
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <!-- <?php echo Form::label('password_confirmation', 'Password confirmation:'); ?> -->
+        </td>
+        <td>
+            <div class="col-sm-8">
+                <!-- <?php echo Form::password('password_confirmation', array('class' => 'form-control')); ?> -->
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <?php echo Form::submit('Submit', array('class' => 'btn btn-primary center-block', 'id' => 'submit_form')); ?>
+
+        </td>
+    </tr>
+<?php echo Form::close(); ?>
+
+<?php if($errors->any()): ?>
+    <ul>
+        <?php echo implode('', $errors->all('<li class="error">:message</li>')); ?>
+
+    </ul>
+<?php endif; ?>
+  </table>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.admin', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

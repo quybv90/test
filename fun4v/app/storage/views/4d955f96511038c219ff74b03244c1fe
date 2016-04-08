@@ -1,0 +1,39 @@
+<?php $__env->startSection('content'); ?>
+    <table class="table table-bordered">
+      <tr>
+        <th>Title</th>
+        <td colspan="2"><b><?php echo $message->title; ?></b></td>
+      </tr>
+      <tr>
+        <th>Content</th>
+        <td colspan="2" style="height: 400px;"><?php echo $message->content; ?></td>
+      </tr>
+      <tr>
+        <th>From user</th>
+        <td colspan="2"><?php echo $message->stage=='feedback' ? "Feedback" : User::find($message->from_id)->name; ?></td>
+      </tr>
+      <tr>
+        <th>To user</th>
+        <td colspan="2"><?php echo $message->stage=='feedback' ? "Feedback" : User::find($message->to_id)->name; ?></td>
+      </tr>
+      <tr>
+        <th>stage</th>
+        <td colspan="2"><?php echo $message->stage; ?></td>
+      </tr>
+      <tr>
+        <th></th>
+        <td>
+          <?php echo link_to_route('admin.messages.edit', 'Edit', array($message->id), array('class' => 'btn btn-info')); ?>
+
+        </td>
+        <td>
+          <?php echo Form::open(array('method' => 'DELETE', 'route' => array('admin.messages.destroy', $message->id))); ?> 
+          <?php echo Form::submit('Delete', array('class' => 'btn btn-danger')); ?> 
+          <?php echo Form::close(); ?>
+
+        </td>
+      </tr>
+    </table>  
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.admin', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

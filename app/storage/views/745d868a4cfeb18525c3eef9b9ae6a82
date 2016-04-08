@@ -1,0 +1,34 @@
+<?php $__env->startSection('content'); ?>
+<div class="panel-heading">
+    <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> List users</h3>
+</div>
+<div class="panel-body">
+    <div id="morris-area-chart">
+    <?php if($users->count()): ?>
+    <table class="table table-bordered table-striped" width="80%">
+      <th>Name</th>
+      <th>Email</th>
+      <th colspan="3">Action</th>
+      <?php foreach($users as $user): ?>
+        <tr>
+          <td><?php echo $user->email; ?></td>
+          <td><?php echo $user->name; ?></td>
+          <td><?php echo link_to_route('admin.users.show', 'Detail', array($user->id), array('class' => 'btn btn-info')); ?></td>
+          <td><?php echo link_to_route('admin.users.edit', 'Edit', array($user->id), array('class' => 'btn btn-info')); ?></td>
+          <td>
+            <?php echo Form::open(array('method' => 'DELETE', 'route' => array('admin.users.destroy', $user->id))); ?> 
+            <?php echo Form::submit('Delete', array('class' => 'btn btn-danger')); ?> 
+            <?php echo Form::close(); ?>
+
+          </td>
+        </tr>
+      <?php endforeach; ?>
+        </table>
+        <div style="text-align: center"><?php echo $users->links();; ?></div>
+      <?php else: ?>
+        There are no users
+      <?php endif; ?>
+    </div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.admin', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

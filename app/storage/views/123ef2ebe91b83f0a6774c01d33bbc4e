@@ -1,0 +1,26 @@
+<?php $__env->startSection('content'); ?>
+<div id="content">
+    <article class="post clearfix">
+		<h3 class="text-left">
+			<div class="codehilite">
+				Người gửi: <b><?php echo ViewHelper::from_user_name($message); ?></b>
+			</div>
+			<hr>
+		</h3>
+
+		<div class="text-">
+			<?php echo $message->content; ?>
+
+		</div>
+
+	    <div style="text-align: right"><?php echo Form::open(array('method' => 'DELETE', 'route' => array('admin.messages.destroy', $message->id))); ?> 
+            <?php echo Form::submit('Xóa tin nhắn', array('class' => 'btn btn-danger')); ?> 
+            <?php echo Form::close(); ?></div>
+    </article>
+    <hr>
+    <?php echo $__env->make('messages.bottom_related_post', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+</div>
+	<?php echo $__env->make('messages.left_panel', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.new_view', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

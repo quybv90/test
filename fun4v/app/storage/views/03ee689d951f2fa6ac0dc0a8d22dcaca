@@ -1,0 +1,211 @@
+<?php $__env->startSection('content'); ?>
+<?php if(false): ?>
+<?php echo $__env->make('partials.modal_warning_qr_code', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+<?php endif; ?>
+<head>
+    <link href="<?php echo asset('css/facebook_post.css'); ?>" rel="stylesheet">
+    <link href="<?php echo asset('css/comment_box.css'); ?>" rel="stylesheet">
+</head>
+<!-- reservation-information -->
+  <div id="content">
+      <article class="post clearfix">
+
+        <a href='<?php echo route("post_show", ["slug" => Str::slug($post->title), "id" => $post->id]); ?>'>
+          <h1 class="post-title break-wword">[<?php echo ($post-> category == "photo") ? "Ảnh" : "Video"; ?>] <?php echo $post->title; ?></h1>
+        </a>
+        <h6 class="posted_by" >
+          <?php echo Lang::get("common.posted_by"); ?> <?php echo link_to_route('users.show', $post->user->name, array($post->user->id)); ?>
+
+                              <?php echo ViewHelper::time_elapsed_string($post->created_at); ?> <?php echo Lang::get("common.time_ago"); ?>
+
+        </h6>
+
+        <div>
+            <?php echo ViewHelper::fbLikeButton($post); ?>
+
+            <?php echo ViewHelper::fbShareButton($post); ?>
+
+        </div>
+
+        <span class="glyphicon glyphicon-eye-open post-view"><?php echo $post->total_views(); ?></span>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <span class="glyphicon glyphicon-comment post-view"><span class="fb-comments-count" data-href="<?php echo $post->url; ?>"></span></span>
+
+        <hr >
+
+        <header>
+          <!-- NEXT AND PREVIOUS -->
+          <div>
+            <div>
+                <?php if($previous_post): ?>
+                    <a class="btn btn-info" styte="float: letf;" href='<?php echo route("post_show", array("slug" => Str::slug($previous_post->title), "id" => $previous_post->id)); ?>'>
+                        <?php echo (Lang::get("common.pre_post")); ?></a>
+                <?php endif; ?>
+                <?php if($next_post): ?>
+                    <a class="btn btn-info" style="float: right;" href='<?php echo route("post_show", array("slug" => Str::slug($next_post->title), "id" => $next_post->id)); ?>'>
+                        <?php echo (Lang::get("common.next_post")); ?></a>
+                <?php endif; ?>
+            </div>
+            <hr />
+          </div>
+          <!-- NEXT AND PREVIOUS -->
+
+          <div id="content-div" style="vertical-align: bottom; text-align: center;">
+            <?php if($post->category == "photo"): ?>
+                <?php echo ViewHelper::displayPhoto($post); ?>
+
+            <?php elseif($post->category == "video"): ?>
+                <iframe align="center" style="width:90%; height:400px"  src="<?php echo ViewHelper::convertUrl($post->content); ?>" allowfullscreen frameborder="yes" scrolling="yes" name="myIframe" id="myIframe"> </iframe>
+            <?php endif; ?>
+          </div>
+
+        </header>
+        
+        <figure class="post-image1"> 
+          <b>Vote để bài này được lên trang chủ nhé :)</b>
+        <!-- like -->
+          <div class="rateWrapper"><span class="like rate rateUp" id="<?php echo $post->id; ?>" data-item="<?php echo $post->id; ?>">
+          <span class="rateUpN"><?php echo Lang::get('common.like_label'); ?> <?php echo ViewHelper::likeNumber($post->true_likes()->count()); ?></span></span>
+          <span class="disLike rate rateDown" data-item="<?php echo $post->id; ?>" id="dis_<?php echo $post->id; ?>">
+          <span class="rateDownN"><?php echo Lang::get('common.dislike_label'); ?> <?php echo ViewHelper::likeNumber($post->disLikes()->count()); ?></span></span></div><br />
+          <!-- end like -->
+        </figure>
+
+        <div><b><img src="<?php echo asset('images/like-icon.png'); ?>" alt="Like"> Like <a href="https://www.facebook.com/fun4v" target="_blank">Fun4v trên Facebook</a> để được quay tay nhiều hơn</b></div>
+        <br>
+        <div class="fb-like" data-href="https://www.facebook.com/fun4v" data-layout="standard" data-action="like" data-show-faces="false" data-share="false"></div>
+        <hr />
+
+        <div id="other_content">
+            <?php echo ViewHelper::fbComementBox($post); ?>
+
+        </div>
+      </article>
+    <!-- /.post -->
+    </div>
+      <?php echo $__env->make('posts.related_post', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+<!-- /#content --> 
+
+<?php if(count($comments) > Config::get('constants.SHOW_COMMENT_PER_PAGE')): ?>
+    <div class="text-center" ><button class="btn btn-info" id="load_more">show more comment </button></div>
+<?php endif; ?>
+<!--
+<div class="text-center" style="margin-top:2em; text-align:center; display:none;" id="img_loading"><img style="" src="<?php echo asset('img/loading.gif'); ?>"></div>
+-->
+<div class="text-center" style="margin-top:2em; text-align:center; display:none;" id="img_loading"><img style="" src="http://www.nasa.gov/multimedia/videogallery/ajax-loader.gif"></div>
+<!-- TO TOP -->
+<?php echo $__env->make('partials.to_top', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+ <!-- /.row -->
+
+<?php echo $__env->make('posts.reservation_information', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+<?php if($post->category == "photo"): ?>
+  <!-- <?php echo $__env->make('partials.load_more', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?> -->
+<?php endif; ?>
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+    $("#modal_warning_qr_code").modal('show');
+    $('.status').click(function() { $('.arrow').css("left", 0);});
+    $('.photos').click(function() { $('.arrow').css("left", 146);});
+});
+
+$('#input-rating').on('rating.change', function(event, value, caption) {
+    $.ajax({
+        type: 'PUT',
+            url: '<?php echo URL::action("PostController@update", [$post->id]); ?>',
+            dataType:'JSON',
+            data: {rate: value},
+            success: function(data){
+                alert("success");
+            }
+    });
+});
+
+function nl2br (str, is_xhtml) {   
+    var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';    
+    return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1'+ breakTag +'$2');
+}
+
+function comment(content) {
+    $user_name = "<?php echo $current_name; ?>";
+    $avatar = "<?php echo $avatar; ?>";
+    $time = new Date();
+    $timeAgo = jQuery.timeago($time);
+    $comment_content = $("#commentContent").val();
+    $("#commentList li:first").before(' <li><div class="commenterImage"><img src=' + $avatar + '></div><div class="commentText"><b style="color:#8b9dc3">' + $user_name + ' </b><p class="commentText">' + nl2br($comment_content) + '</p> <span class="date sub-text">' + $timeAgo + '</span> </div><hr></li> ');
+    $("#commentContent").val('');
+    post_id = <?php echo $post->id; ?>;
+    $.ajax({
+        type: 'POST',
+            url: '<?php echo URL::action("CommentController@store"); ?>',
+            dataType:'JSON',
+            data: {content: content, post_id: post_id},
+            success: function(data){
+            }
+    });
+}
+
+$(function() {
+    $max_page = <?php echo round(count($comments) / $per_page); ?>;
+    post_id = <?php echo $post->id; ?>;
+    $track_list = 1;
+    $("#load_more").on("click", function() {
+        $(this).hide();
+        $("#img_loading").show();
+        $.ajax({
+            type: 'POST',
+                url: '<?php echo URL::action("CommentController@loadContent"); ?>',
+                dataType:'JSON',
+                data: {page: $track_list, post_id: post_id},
+                success: function(data){
+                    $track_list++;
+                    $("#img_loading").hide();
+                    if($track_list <= $max_page) {
+                        $("#load_more").show();
+                    }
+                    $("#commentList li:last").after(data); 
+                }
+        });
+    })
+});
+
+$("#postComment").addClass("disabled");
+
+$('#commentContent').on("input", function() {
+    $comment_content = $(this).val();
+    $("#postComment").toggleClass("disabled", $comment_content == '');
+});
+
+$(function(){
+    $running =false;
+    $('#commentContent').on("keypress", function(e) {
+        $checkedValue = $('#press_to_enter:checked').val();
+        $comment_content = $("#commentContent").val();
+        $raw_comment_content = $comment_content.trim();
+        if($checkedValue)
+        {
+            //enter key
+            if (e.keyCode == 13 && !e.shiftKey && $raw_comment_content != '') {
+                $running = true;
+                $("#postComment").addClass('disabled');
+                comment($comment_content);
+                //submit form
+                return false;
+            }
+        }
+    });
+
+    $("#postComment").on("click", function() {
+        if($running === false) {
+            $running = true;
+        }
+        $(this).addClass('disabled');
+        comment($comment_content);
+    });
+});
+</script>
+
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.new_view', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

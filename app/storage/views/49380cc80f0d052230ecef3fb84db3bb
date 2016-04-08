@@ -1,0 +1,37 @@
+<?php $__env->startSection('content'); ?>
+  <div id="content">
+    <h3 class="text-center">Tin nhắn của bạn</h3>
+      <article class="post clearfix">
+        <?php if($messages->count()): ?>
+          <table class="table table-bordered table-striped" width="80%">
+            <th>Tiêu đề</th>
+            <th>Người Gửi</th>
+            <th colspan=""></th>
+            <?php foreach($messages as $message): ?>
+              <tr>
+                <td>
+                	<a href="<?php echo route('show_message', ['id' => $message->id]); ?>">
+                		<span style="color: <?php echo $message->stage == 'unread'? 'red' : ''; ?>"><b><?php echo $message->title; ?></b></span>
+                	</a>
+                </td>
+                <td><?php echo ViewHelper::from_user_name($message); ?></td>
+                <td>
+                  <?php echo Form::open(array('method' => 'DELETE', 'route' => array('admin.messages.destroy', $message->id))); ?> 
+                  <?php echo Form::submit('Xóa tin nhắn', array('class' => 'btn btn-danger')); ?> 
+                  <?php echo Form::close(); ?>
+
+                </td>
+              </tr>
+            <?php endforeach; ?>
+          </table>
+          <div style="text-align: center"><?php echo $messages->links('pagination::slider-3'); ?></div>
+        <?php else: ?>
+          There are no messages
+        <?php endif; ?>
+      </article>
+      <hr>
+      <?php echo $__env->make('messages.bottom_related_post', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+  </div>
+  <?php echo $__env->make('messages.left_panel', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.new_view', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -1,0 +1,205 @@
+<?php $__env->startSection('content'); ?>
+<h1>Create Post</h1>
+<?php echo Form::open(array('route' => 'posts.store', 'files'=>true)); ?>
+
+  <table class="table">
+    <tr>
+        <td>
+            <?php echo Form::label('category', 'Thể loại:'); ?>
+
+        </td>
+        <td>
+            <div class="col-sm-8">
+                <div class="btn-group" data-toggle="buttons">
+                    <label id="labelPhoto" class="btn btn-warning active">
+                        <?php echo Form::radio('category', 'photo', 'true'); ?> Ảnh <br>
+                    </label> 
+                    <label id="labelVideo" class="btn btn-warning">
+                        <?php echo Form::radio('category', 'video'); ?> Video<br>
+                    </label> 
+                    <!-- <label id="labelMusic" class="btn btn-warning">
+                        <?php echo Form::radio('category', 'music'); ?> Music<br>
+                    </label>  -->
+                </div>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <?php echo Form::label('title', 'Tiêu đề:'); ?>
+
+        </td>
+        <td>
+            <div class="col-sm-8">
+                <?php echo Form::text('title', '', array('class' => 'form-control')); ?>
+
+            </div>
+        </td>
+    </tr>
+    <tr id="mediaTr" style="display:none;">
+        <td>
+                <?php echo Form::label('content', 'Đường dẫn video (Youtube):'); ?>
+
+        </td>
+        <td>
+            <div class="col-sm-8">
+                <?php echo Form::text('content', '', array('class' => 'form-control', 'id' => 'media_content')); ?>
+
+                <div class="wowload fadeInRight" style="margin-top:20px;">
+                </div>    
+            </div>
+        </td>
+    </tr>
+    <tr id="photoTr">
+        <td>
+                <?php echo Form::label('content', 'Đường dẫn ảnh:'); ?>
+
+        </td>
+        <td>
+            <div class="col-sm-8">
+                <?php echo Form::radio('category_photo', 'upload', 'true'); ?> Upload
+                <?php echo Form::radio('category_photo', 'url'); ?> From URL <br>
+                <div style="" class="url_photo" id="photo_div">
+                  <?php echo Form::file('content[]',array('multiple'=>true, 'id'=>'photo_content','form-control'=>'', 'class' => 'file_photo')); ?>
+
+                </div>
+                <img src="#" id="file_photo_preview" style="display:none;width:200px;height:200px;"/>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <?php echo Form::label('description', 'Mô tả:'); ?>
+
+        </td>
+        <td>
+            <div class="col-sm-8">
+                <?php echo Form::textarea('description', '', array('class' => 'form-control')); ?>
+
+            </div>
+        </td>
+        <?php echo Form::hidden('user_id', Auth::user()->id); ?>
+
+        <?php echo Form::hidden('rate', 0); ?>
+
+        <?php echo Form::hidden('type', 'normal'); ?>
+
+        <?php echo Form::hidden('status', "New"); ?>
+
+        <?php echo Form::hidden('is_hot', 1); ?>
+
+    </tr>
+   <!--  <tr>
+        <td>
+            <?php echo Form::label('is_hot', 'Hot'); ?>
+
+        </td>
+        <td>
+            <div class="col-sm-8">
+                <?php echo Form::radio('is_hot', '1', 'true'); ?> Hot
+                <?php echo Form::radio('is_hot', '0'); ?> Not Hot <br>
+            </div>
+        </td>
+    </tr> -->
+    <tr>
+        <td colspan="2">
+            <?php echo Form::submit('Đăng bài', array('class' => 'btn btn-primary center-block', 'id' => 'submit_form')); ?>
+
+        </td>
+    </tr>
+<?php echo Form::close(); ?>
+
+<?php if($errors->any()): ?>
+    <ul>
+        <?php echo implode('', $errors->all('<li class="error">:message</li>')); ?>
+
+    </ul>
+<?php endif; ?>
+  </table>
+
+<script>
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#file_photo_preview').show();
+                $('#file_photo_preview').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $(".file_photo").on("change", function() {
+      readURL(this);
+    });
+$(document).ready(function(){
+    $category = "<?php echo $category; ?>";
+    if($category == "video") {
+        $("#labelVideo").addClass('active');
+        $("#labelPhoto").removeClass('active');
+        $("#labelPhoto").addClass('disabled');
+        $("#labelMusic").addClass('disabled');
+        $("#mediaTr").show();
+        $("#photoTr").hide();
+    }
+
+    function getId(url) {
+        var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+        var match = url.match(regExp);
+    
+        if (match && match[2].length == 11) {
+            return match[2];
+        } else {
+            return 'error';
+        }
+    }
+    
+    $("input:radio[name=category]").on("change", function() {
+        $value = $(this).val();
+        if($value == "photo") {
+            $("#mediaTr").hide();
+            $("#photoTr").show();
+            $("#media_content").attr('name', 'remove')
+            $("#photo_content").attr('name', 'content');
+        } else {
+            $("#mediaTr").show();
+            $("#photoTr").hide();
+            $("#photo_content").attr('name', 'remove');
+            $("#media_content").attr('name', 'content')
+        }
+    });
+
+    $("input:radio[name=category_photo]").on("change", function() {
+        $value = $(this).val();
+        var ct;
+        if($value == "upload") {
+            ct = '<?php echo Form::file('content[]',array('multiple'=>true, 'id'=>'photo_content','form-control'=>'', 'class' => 'file_photo')); ?>';
+            $("#photo_div").html(ct);
+        } else {
+            ct = '<?php echo Form::textarea('content', '', array('rows' => 8, 'class' => 'form-control', 'id' => 'photo_content')); ?>'
+            $("#photo_div").html(ct);
+        }
+    });
+    
+    $("#media_content").on("input", function() {
+        $(".wowload").html('<div style="text-align:center;"><img src="http://a.deviantart.net/avatars/l/o/loading-plz.gif?1"></div>');
+        $value = $(this).val(); 
+        $videoId = getId($value);
+        $youtubeUrl = "//www.youtube.com/embed/" + $videoId;
+        if($value.indexOf("youtube.com") != -1) {
+            setTimeout(function(){ 
+                $(".wowload").html('<iframe  class="embed-responsive-item" src=' + $youtubeUrl + ' width="400" height="280" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>');
+            }, 1000);
+        }
+    });
+        $("#photo_content").val(sessionStorage.getItem("leechLinks"));
+    
+});
+</script>
+
+
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.visitor', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

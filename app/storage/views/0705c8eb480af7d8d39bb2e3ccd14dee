@@ -1,0 +1,145 @@
+<?php $__env->startSection('content'); ?>
+  <?php if($active_event->count()): ?>
+    <div class="row" id="top-buttons">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                <div class="text-right">
+                  <?php echo $active_event[0]->content; ?>
+
+                </div>
+            </h1>
+        </div>
+    </div>
+  <?php endif; ?>
+  <div id="content">
+  <?php if($posts->count()): ?>
+    <?php foreach($posts as $index => $post): ?>
+      <article class="post clearfix">
+        <header>
+          <a href='<?php echo route("post_show", ["slug" => Str::slug($post->title), "id" => $post->id]); ?>'>
+            <h4 class="post-title break-wword">[<?php echo ($post-> category == "photo") ? "Photo" : "Clip"; ?>] <b><?php echo $post->title; ?></b></h4>
+          </a>
+          <div class="header-info">
+            <div class="header-left">
+              <h6 class="posted_by" >
+                <?php echo Lang::get("common.posted_by"); ?> <?php echo link_to_route('users.show', $post->user->name, array($post->user->id)); ?>
+
+                                    <?php echo ViewHelper::time_elapsed_string($post->created_at); ?> <?php echo Lang::get("common.time_ago"); ?>
+
+              </h6>
+
+              <div>
+                  <?php echo ViewHelper::fbLikeButton($post); ?>
+
+                  <?php echo ViewHelper::fbShareButton($post); ?>
+
+              </div>
+
+              <span class="glyphicon glyphicon-eye-open post-view"><?php echo $post->total_views(); ?></span>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <span class="glyphicon glyphicon-comment post-view"><span class="fb-comments-count" data-href="<?php echo $post->url; ?>"></span></span>
+            </div>
+            <div class="header-right">
+              <h6><b>Vote để ủng hộ cho tác giả nhé :)</b></h6>
+              <!-- like -->
+              <div class="rateWrapper"><span class="like rate rateUp" id="<?php echo $post->id; ?>" data-item="<?php echo $post->id; ?>">
+              <span class="rateUpN"><?php echo Lang::get('common.like_label'); ?> <?php echo ViewHelper::likeNumber($post->true_likes()->count()); ?></span></span>
+              <span class="disLike rate rateDown" data-item="<?php echo $post->id; ?>" id="dis_<?php echo $post->id; ?>">
+              <span class="rateDownN"><?php echo Lang::get('common.dislike_label'); ?> <?php echo ViewHelper::likeNumber($post->disLikes()->count()); ?></span></span></div><br />
+              <!-- end like -->
+            </div>
+          </div>
+        </header>
+        <figure class="post-image"> 
+          <?php if($post->category == "photo"): ?>
+              <?php echo ViewHelper::displayOnePhoto($post->content, $post->title, $post->id); ?>
+
+          <?php elseif($post->category == "video"): ?>
+              <iframe align="center" style="width:90%; height:350px"  src="<?php echo ViewHelper::convertUrl($post->content); ?>"  
+  frameborder="yes" scrolling="yes" name="myIframe" id="myIframe"> </iframe>
+          <?php endif; ?>
+        </figure>
+
+      </article>
+    <!-- /.post -->
+      <?php if($index == 0): ?>
+          <hr >
+          <div><b><img src="<?php echo asset('images/like-icon.png'); ?>" alt="Like"> Like <a href="https://www.facebook.com/fun4v" target="_blank">Fun4v trên Facebook</a> để được quay tay nhiều hơn</b></div>
+          <br>
+          <div class="fb-like" data-href="https://www.facebook.com/fun4v" data-layout="standard" data-action="like" data-show-faces="false" data-share="false"></div>
+      <?php endif; ?>
+      <hr />
+      <?php endforeach; ?>
+      <!-- TO TOP -->
+      <?php echo $__env->make('partials.to_top', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+      
+      <div id="paging">
+        <?php echo $posts->links('pagination.only_next'); ?>
+
+      </div>
+      <hr />
+    <?php else: ?>
+      
+    <?php endif; ?>
+  </div>
+<!-- /#content --> 
+
+
+  <aside id="sidebar">
+
+    <section class="widget">
+      <h4 class="widgettitle"><img src="<?php echo asset('images/icon-ranking.gif'); ?>"></img> <?php echo Lang::get("common.ranked_users"); ?></h4>
+      <ul>
+        <?php foreach($ranked_users as $user): ?>
+          <hr />
+          <div class="ranked-users">
+            <a target="_blank" href="<?php echo route('users.show', ['id' => $user->id]); ?>">
+              <img src="<?php echo $user->avatar_url; ?>" alt="<?php echo $user->name; ?>" id="<?php echo $user->name; ?>" class="user-ranked-avatar"/></a>
+              <div class="">
+                  <div><a target="_blank" href="<?php echo route('users.show', ['id' => $user->id]); ?>"><?php echo $user->name; ?></a></div>
+                  <span style="color: red"><?php echo $user->total_likes; ?> <i class="glyphicon glyphicon-heart-empty" style="color: red;"></i></span>
+              </div>
+          </div>
+        <?php endforeach; ?>
+        <hr />
+      </ul>
+      <div class="text-right"><a href="<?php echo route('static_page', ['filename' => 'bang-xep-hang']); ?>"> Hiển thị thêm </a></div>
+    </section>
+    <!-- /.widget -->
+
+    <section class="widget clearfix">
+      <h4 class="widgettitle"><img src="<?php echo asset('images/icon-hot.gif'); ?>"></img><?php echo Lang::get("posts.hot_photos"); ?></h4>
+      <?php foreach($hot_images as $image): ?>
+        <hr />
+        <div class="hot-images-top">
+        <a target="_blank" href="<?php echo route('post_show', ['slug' => Str::slug($image->title), 'id' => $image->id]); ?>">
+          <img src="<?php echo ViewHelper::getFirstImage($image->content); ?>" alt="<?php echo $image->title; ?>" id="<?php echo $image->title; ?>"/></a>
+          <div class="right-des">
+              <p class="ellipsis"><?php echo link_to_route('post_show', $image->title, ['slug' => Str::slug($image->title), 'id' => $image->id]); ?></p>
+              <span class="glyphicon glyphicon-eye-open post-view"><?php echo $image->total_views(); ?></span>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <span class="glyphicon glyphicon-comment post-view"><span class="fb-comments-count" data-href="<?php echo $image->url; ?>"></span></span>
+          </div>
+      </div>
+      <?php endforeach; ?>
+
+    </section>
+    <!-- /.widget -->
+
+    <div id="sticky-anchor"></div>
+    <div id="last-widget">
+      <section class="widget clearfix">
+        <h4 class="widgettitle plugin-area-top plugin-text">Like <a href="https://www.facebook.com/fun4v">Fan page của Fun4v.com</a> bạn nhé !</h4>
+        <div class="fb-page" data-href="https://www.facebook.com/fun4v" data-width="300" data-hide-cover="false" data-show-facepile="true" data-show-posts="false"><div class="fb-xfbml-parse-ignore"><blockquote cite="https://www.facebook.com/fun4v"><a href="https://www.facebook.com/fun4v">Góc thư giãn.</a></blockquote></div></div>
+      </section>
+      <section class="widget clearfix">
+        <div class="fb-page"><img src="<?php echo asset('images/quang-cao.jpg'); ?>" /></div>
+      </section>
+    </div>
+    <!-- /.widget -->
+            
+  </aside>
+<!-- /#sidebar -->
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.new_view', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

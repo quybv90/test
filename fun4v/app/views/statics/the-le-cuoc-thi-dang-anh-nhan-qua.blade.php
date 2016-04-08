@@ -1,0 +1,41 @@
+@extends('layouts.visitor')
+@section('content')
+  <div class="container target " style="padding-top: 70px">
+  	<div class="row" id="top-buttons">
+      <div class="col-lg-12">
+        <h4><p class="text-center" style="color:red">Thể lệ cuộc thi Khoe ảnh gái xinh - Dinh Quà về nhà</p><h4>
+        <hr>
+          </div>
+      </div>
+      <div class="row" id="top-buttons" style="border: 1px blue;">
+        <div class="col-lg-8">
+          <div class="content" style="">
+            <h3>I. Nội dung cuộc thi</h3>
+              &nbsp; &nbsp; <h4>1. Đơn vị tổ chức</h4>
+              &nbsp; &nbsp; &nbsp; &nbsp;Ban quản trị fun4v.com
+              &nbsp; &nbsp; <h4>2. Thời gian tổ chức</h4>
+              &nbsp; &nbsp; &nbsp; &nbsp;Chúng tôi tổ chức hàng tháng, Dựa theo số điểm mà người dùng tích lũy được trong tháng đó.<br>
+              &nbsp; &nbsp; <h4> 3. Mục đích </h4>
+              &nbsp; &nbsp; &nbsp; &nbsp;Tạo một sân chơi lành mạnh và cạnh tranh, Đồng thời chọn ra được những bức ảnh đẹp nhất để Tôn Vinh Vẻ đẹp phái yếu.<br>
+            <h3>II. Nội quy cuộc thi</h3>
+              &nbsp; &nbsp; 1. Không cung cấp, trao đổi, truyền đưa thông tin xuyên tạc lịch sử, xúc phạm anh hùng dân tộc <br/>
+              &nbsp; &nbsp; 2. Không đăng tải hình ảnh khiêu dâm, gợi dục <br/>
+              &nbsp; &nbsp; 3. Không đăng tải hình ảnh, thông tin xúc phạm cá nhân hoặc tổ chức nào <br/>
+              &nbsp; &nbsp; 4. Không bình luận vô văn hoá <br/>
+              &nbsp; &nbsp; 5. Thành viên tự chịu trách nhiệm về nội dung mình đăng tải, mọi sai phạm sẽ bị khoá tài khoản truy cập vĩnh viễn <br/>
+            <h3>III. Phần thưởng</h3>
+            Giải thưởng bao gồm: <br>
+             &nbsp; &nbsp;- 1 Giải thất: 1 chiếc điện thoại Iphone 5s 16GB - Phiên bản quốc tế.<br>
+             &nbsp; &nbsp;- 1 Giải nhì : Thẻ nạp điện thoại mệnh giá 500k.<br>
+             &nbsp; &nbsp;- 3 Giải ba  : Mỗi giải là một thẻ nạp điện thoại trị giá 200k.<br>
+             &nbsp; &nbsp;- 10 GiảiKhuyến khích: Mỗi giải là Một thẻ nạp điện thoại trị giá 20k.<br>
+            <h3>IV. Cách thức nhận quà </h3>
+              &nbsp; &nbsp;- Đối với giải nhất chúng tôi sẽ liên lạc trực tiếp với người nhận thưởng để lấy địa chỉ và gửi quà về tận nhà.<br>
+              &nbsp; &nbsp;- Đối với  các giải khác chúng tôi sẽ gửi tin nhắn chứa mã thẻ nạp đến với bạn hoặc chuyển khoản tới thẻ ngân hàng (chỉ áp dụng với ngân hành Vietcombank và giá trị giải thưởng từ 200k trở lên)
+          </div>
+      </div>
+    </div>
+  </div>
+  <div class="text-right">Chúc bạn thành công! !^^<br>
+    BQT fun4v.com</div>
+@stop

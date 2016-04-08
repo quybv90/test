@@ -1,0 +1,66 @@
+<script src="//cdn.ckeditor.com/4.5.3/standard/ckeditor.js"></script>
+<h1>Create Message</h1>
+<?php $__env->startSection('content'); ?>
+<?php echo Form::open(array('route' => 'admin.messages.store')); ?>
+
+  <table class="table">
+    <tr>
+        <td>
+            <?php echo Form::label('title', 'Title:'); ?>
+
+        </td>
+        <td>
+            <?php echo Form::text('title'); ?>
+
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <?php echo Form::label('content', 'Content:'); ?>
+
+        </td>
+        <td>
+            <?php echo Form::textarea('content', '', array('class' => 'ckeditor', 'rows' => '15', 'cols' => "70")); ?>
+
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <?php echo Form::label('to_id', 'To user:'); ?>
+
+        </td>
+        <td>
+            <?php echo Form::select('to_id', ['all' => 'Tất cả'] + User::lists('name', 'id'), array(1)); ?>
+
+            <?php echo Form::hidden('stage', 'unread'); ?>
+
+            <?php echo Form::hidden('from_id', Auth::user()->id); ?>
+
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <?php echo Form::submit('Submit', array('class' => 'btn')); ?>
+
+        </td>
+    </tr>
+<?php echo Form::close(); ?>
+
+<?php if($errors->any()): ?>
+    <ul>
+        <?php echo implode('', $errors->all('<li class="error">:message</li>')); ?>
+
+    </ul>
+<?php endif; ?>
+  </table>
+  <script>
+  $(function() {
+    $('.datepicker').datepicker({
+        format: "yyyy/m/d",
+    });
+    // $("#some-textarea").markdown();
+  });
+</script>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.admin', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

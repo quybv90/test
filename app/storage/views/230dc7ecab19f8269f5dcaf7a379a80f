@@ -1,0 +1,94 @@
+<h1 class="text-center">Edit User Profile</h1>
+<?php $__env->startSection('content'); ?>
+<?php echo Form::model($user, array('method' => 'PATCH', 'route' =>
+ array('users.update', $user->id), 'files'=>true)); ?>
+
+  <table class="table table-bordered">
+    <tr>
+        <td>
+            <?php echo Form::label('name', 'Name:'); ?>
+
+        </td>
+        <td>
+            <?php echo Form::text('name'); ?>
+
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <?php echo Form::label('email', 'Email:'); ?>
+
+        </td>
+        <td>
+            <?php echo Form::text('email'); ?>
+
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <?php echo Form::label('password', 'Password:'); ?>
+
+        </td>
+        <td>
+            <?php echo Form::password('password'); ?>
+
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <?php echo Form::label('password_confirmation', 'Password confirmation:'); ?>
+
+        </td>
+        <td>
+            <?php echo Form::password('password_confirmation'); ?>
+
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <?php echo Form::label('avatar_url', 'Avatar:'); ?>
+
+        </td>
+        <td>
+            <?php echo Form::file('avatar_url',array('id'=>'avatar_url','class'=>'')); ?>
+
+            <br />
+            <img src="<?php echo $user->avatar_url; ?>" id="avatar_preview" style="width:200px;height:200px;"/>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <?php echo Form::submit('Submit', array('class' => 'btn btn-primary')); ?>
+
+        </td>
+    </tr>
+<?php echo Form::close(); ?>
+
+<?php if($errors->any()): ?>
+    <ul>
+        <?php echo implode('', $errors->all('<li class="error">:message</li>')); ?>
+
+    </ul>
+<?php endif; ?>
+  </table>
+
+<script>
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            $('#avatar_preview').show();
+            $('#avatar_preview').attr('src', e.target.result);
+        }
+
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+$("#avatar_url").on("change", function() {
+   readURL(this);
+});
+</script>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.visitor', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

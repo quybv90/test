@@ -1,0 +1,47 @@
+<script src="//cdn.ckeditor.com/4.5.3/standard/ckeditor.js"></script>
+<div class="modal fade" id="modal_feedback" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Đóng góp ý kiến cho website</h4>
+      </div>
+      <div class="modal-body">
+        <?php echo Form::open(array('route' => 'messages.store')); ?>
+
+          <table class="table">
+            <tr>
+                <td>
+                    <?php echo Form::label('title', 'Tiêu đề:'); ?>
+
+                </td>
+                <td>
+                    <?php echo Form::text('title','', array('size' => '55')); ?>
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <?php echo Form::label('content', 'Nội dung phản hồi:'); ?>
+
+                </td>
+                <td>
+                    <?php echo Form::textarea('content', '', array('class' => 'ckeditor', 'rows' => '15', 'cols' => "70")); ?>
+
+                    <?php echo Form::hidden('stage', 'feedback'); ?>
+
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="text-center">
+                    <?php echo Form::submit('Gửi phản hồi', array('class' => 'btn btn-primary')); ?>
+
+                </td>
+            </tr>
+          </table>
+        <?php echo Form::close(); ?>
+
+      </div>
+    </div>
+  </div>
+</div>

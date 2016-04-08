@@ -1,0 +1,62 @@
+<div class="modal fade" id="modal_leech_photo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Save leech to my clipboad</h4>
+      </div>
+      <div class="modal-body">
+    <?php echo Form::open(array('route' => 'leech_photos.store')); ?>
+
+      <table class="table table-bordered">
+        <tr>
+            <td>
+                <?php echo Form::label('title', 'Title:'); ?>
+
+            </td>
+            <td>
+                <div class="col-sm-8">
+                    <?php echo Form::text('title', '', array('class' => 'form-control')); ?>
+
+                </div>
+            </td>
+        </tr>
+        <tr id="photoTr">
+            <td>
+                    <?php echo Form::label('content', 'Content Url:'); ?>
+
+            </td>
+            <td>
+                <div class="col-sm-8">
+                    <?php echo Form::textarea('content', '', array('rows' => 8, 'class' => 'form-control', 'id' => 'photo_content')); ?>
+
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <?php echo Form::label('description', 'Description:'); ?>
+
+            </td>
+            <td>
+                <div class="col-sm-8">
+                    <?php echo Form::textarea('description', '', array('class' => 'form-control')); ?>
+
+                </div>
+            </td>
+            <?php echo Form::hidden('user_id', Auth::user()->id); ?>
+
+        </tr>
+        <tr>
+            <td colspan="2">
+            <?php echo Form::submit('Submit', array('class' => 'btn btn-primary center-block', 'id' => 'submit_form')); ?>
+
+            </td>
+        </tr>
+      </table>
+    <?php echo Form::close(); ?>
+
+      </div>
+    </div>
+  </div>
+</div>

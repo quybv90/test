@@ -1,0 +1,145 @@
+<?php $__env->startSection('content'); ?>
+<hr class="">
+<div class="container target">
+    <div class="row">
+        <div class="col-sm-10">
+             <h1 class=""><?php echo $user->name; ?></h1>
+            <?php if(Auth::check() && Helper::correctUser(Auth::user()->id, $user->id)): ?>
+              <?php echo HTML::link('logout', Lang::get("common.logout"), array('class' => 'btn btn-success')); ?>
+
+              <?php echo link_to_route('users.edit', Lang::get("common.settings"), array(Auth::user()->id), array('class' => 'btn btn-info')); ?>
+
+            <?php endif; ?>
+<br>
+        </div>
+      <div class="col-sm-2"><a href="/users/<?php echo $user->id; ?>" class="pull-right"><img title="<?php echo $user->name; ?>" class="img-circle img-responsive" src="<?php echo $user->avatar_url; ?>" style="width: 165px; height: 174px;"></a>
+
+        </div>
+    </div>
+  <br>
+    <div class="row">
+        <div class="col-sm-3">
+            <!--left col-->
+            <ul class="list-group">
+                <li class="list-group-item text-muted" contenteditable="false"><?php echo Lang::get("users.profile"); ?></li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong class=""><?php echo Lang::get("users.created_at"); ?></strong></span><div class="text-danger"><?php echo $user->created_at->format('Y-m-d'); ?></div></li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong class=""><?php echo Lang::get("users.last_update"); ?></strong></span><div class="text-danger"><?php echo $user->updated_at->format('Y-m-d'); ?></div></li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong class=""><?php echo Lang::get("users.user_name"); ?></strong></span><div class="text-danger"><?php echo $user->name; ?></div></li>
+            </ul>
+            <div class="panel panel-default">
+                <div class="panel-heading">Website <i class="fa fa-link fa-1x"></i>
+
+                </div>
+                <div class="panel-body"><a href="http://fun4v.com" class="">fun4v.com</a>
+
+                </div>
+            </div>
+          
+            <ul class="list-group">
+                <li class="list-group-item text-muted"><?php echo Lang::get("users.active"); ?> <i class="fa fa-dashboard fa-1x"></i></li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong class=""><?php echo Lang::get("users.total_posts"); ?></strong></span><a href=""><?php echo $user->posts->count(); ?> <?php echo Lang::get("posts.post_times"); ?></a></li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong class=""><?php echo Lang::get("users.unapprove"); ?></strong></span><a href=""><?php echo $user->unApprovedPosts->count(); ?> <?php echo Lang::get("posts.post_times"); ?></a></li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong class=""><?php echo Lang::get("users.liked"); ?></strong></span><a href=""><?php echo $user->countLiked->count(); ?> <?php echo Lang::get("posts.times"); ?></a></li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong class=""><?php echo Lang::get("users.was_liked"); ?></strong></span><a href=""><?php echo Like::userWasLiked($user->id)->count(); ?> <?php echo Lang::get("posts.times"); ?></a></li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong class=""><?php echo Lang::get("users.disliked"); ?></strong></span><a href=""><?php echo $user->countDisLiked->count(); ?> <?php echo Lang::get("posts.times"); ?></a></li>
+            </ul>
+            <div class="panel panel-default">
+                <div class="panel-heading"><?php echo Lang::get("common.plugin_title"); ?></div>
+                <div class="fb-page" data-href="https://www.facebook.com/fun4v" data-width="290" data-hide-cover="true" data-show-facepile="true" data-show-posts="false"><div class="fb-xfbml-parse-ignore"><blockquote cite="https://www.facebook.com/fun4v"><a href="https://www.facebook.com/fun4v">Góc thư giãn.</a></blockquote></div></div>
+            </div>
+        </div>
+        <!--/col-3-->
+        <div class="col-sm-9" contenteditable="false" style="">
+            <!-- <div class="panel panel-default">
+                <div class="panel-heading"><?php echo $user->name; ?></div>
+                <div class="panel-body"> Yeu gai dep ^^</div>
+            </div> -->
+            <div class="panel panel-default target">
+                <div class="panel-heading" contenteditable="false"><?php echo Lang::get("users.user_hot_posts"); ?> <?php echo $user->name; ?></div>
+                <div class="panel-body">
+                  <div class="row">
+                    <?php foreach($user_hot_posts as $post): ?>
+                    <div class="col-md-4">
+                      <div class="thumbnail">
+                        <a href="<?php echo route('post_show', ['slug' => Str::slug($post->title), 'id' => $post->id]); ?>">
+                          <?php if($post->category == "photo"): ?>
+                          <img src="<?php echo ViewHelper::getFirstImage($post->content); ?>" alt="<?php echo $post->title; ?>" id="<?php echo $post->title; ?>" style="width: 240px; height: 174px;"/>
+                          <?php elseif($post->category == "video"): ?>
+                          <img src="<?php echo ViewHelper::mqThumbVideo($post->content); ?>" alt="<?php echo $post->title; ?>" id="<?php echo $post->title; ?>" style="width: 240px; height: 174px;"/>
+                          <?php endif; ?>
+                        </a>
+                        <!-- <img alt="300x200" src="http://lorempixel.com/600/200/people"> -->
+                        <div class="caption">
+                          <span class="glyphicon glyphicon-eye-open post-view"><?php echo $post->total_views(); ?></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                          <span class="glyphicon glyphicon-comment post-view"><span class="fb-comments-count" data-href="<?php echo $post->url; ?>"></span></span>
+                          <p>
+                            <?php echo $post->title; ?>
+
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <?php endforeach; ?>
+                  </div>
+                <div class="panel panel-default">
+                  <div class="panel-heading"><?php echo Lang::get("users.user_posts_title"); ?> <?php echo $user->name; ?></div>
+                  <div class="panel-body">
+                    <?php if($user_posts->count()): ?>
+                      <?php foreach($user_posts as $post): ?>
+                        <div class="row" id="post-<?php echo $post->id; ?>">
+                            <div class="col-md-7">
+                              <?php if($post->status == "New"): ?>
+                              <div class="status-new"></div>
+                              <?php endif; ?>
+                                <?php if($post->category == "photo"): ?>
+                                    <?php echo ViewHelper::displayOnePhoto($post->content, $post->title, $post->id); ?>
+
+                                <?php elseif($post->category == "video"): ?>
+                                    <iframe align="center" style="width:90%; height:350px"  src="<?php echo ViewHelper::convertUrl($post->content); ?>"  
+                  frameborder="yes" scrolling="yes" name="myIframe" id="myIframe"></iframe>
+                                <?php endif; ?>
+                            </div>
+                            <div class="col-md-5">
+                                <a href='<?php echo route("post_show", ["slug" => Str::slug($post->title), "id" => $post->id]); ?>'><h3><?php echo $post->title; ?></h3></a>
+                                <h5 class="posted_by" ><?php echo Lang::get("common.posted_by"); ?> <?php echo link_to_route('users.show', $post->user->name, array($post->user->id)); ?>
+
+                                    <?php echo ViewHelper::time_elapsed_string($post->created_at); ?> <?php echo Lang::get("common.time_ago"); ?></h5>
+                                <div>
+                                    <?php echo ViewHelper::fbLikeButton($post); ?>
+
+                                    <?php echo ViewHelper::fbShareButton($post); ?>
+
+                                </div>
+                                <span class="glyphicon glyphicon-eye-open post-view"><?php echo $post->total_views(); ?></span>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <span class="glyphicon glyphicon-comment post-view"><span class="fb-comments-count" data-href="<?php echo $post->url; ?>"></span></span>
+                                <!-- like -->
+                                <div class="rateWrapper"><span class="like rate rateUp" id="<?php echo $post->id; ?>" data-item="<?php echo $post->id; ?>">
+                                <span class="rateUpN">Ngon <?php echo ViewHelper::likeNumber($post->true_likes()->count()); ?></span></span>
+                                <span class="disLike rate rateDown" data-item="<?php echo $post->id; ?>" id="dis_<?php echo $post->id; ?>">
+                                <span class="rateDownN">Ko ngon <?php echo ViewHelper::likeNumber($post->disLikes()->count()); ?></span></span></div><br />
+                                <!-- end like -->
+                                <!-- <p><?php echo $post->description; ?></p> -->
+                            </div>
+                        </div>
+                        <hr>
+                      <?php endforeach; ?>
+                      <div id="paging">
+                        <?php echo $user_posts->links('pagination.only_next'); ?>
+
+                      </div>
+                    <?php else: ?>
+                      <?php if(Auth::check() && Auth::user()->id == $user->id): ?>
+                        Bạn chưa đăng bài nào, Hãy nhấn vào <?php echo link_to_action('PostController@create', 'Đây', array(), array('class' => '')); ?> để đăng bài nhé
+                      <?php else: ?>
+                        Không có bài đăng nào!!!
+                      <?php endif; ?>
+                    <?php endif; ?>
+                  </div>
+                </div>
+        </div>
+        </div>
+</div>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.visitor', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -1,0 +1,84 @@
+<h1>Create event</h1>
+<?php $__env->startSection('content'); ?>
+<?php echo Form::model($event, array('method' => 'PATCH', 'route' =>
+ array('admin.events.update', $event->id))); ?>
+
+  <table class="table">
+    <tr>
+        <td>
+            <?php echo Form::label('title', 'Title:'); ?>
+
+        </td>
+        <td>
+            <?php echo Form::text('title', $event->title); ?>
+
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <?php echo Form::label('content', 'Content:'); ?>
+
+        </td>
+        <td>
+            <?php echo Form::textarea('content', $event->content, array('data-provide' => 'markdown', 'id' => 'some-textarea', 'rows' => '25', 'cols' => "70")); ?>
+
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <?php echo Form::label('started_date', 'Start date:'); ?>
+
+        </td>
+        <td>
+            <?php echo Form::text('started_date', date("Y/m/d", strtotime($event->started_date)), array('class' => 'datepicker')); ?>
+
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <?php echo Form::label('end_date', 'End date:'); ?>
+
+        </td>
+        <td>
+            <?php echo Form::text('end_date', date("Y/m/d", strtotime($event->end_date)), array('class' => 'datepicker')); ?>
+
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <?php echo Form::label('status', 'Status'); ?>
+
+        </td>
+        <td>
+            <div class="col-sm-8">
+                <?php echo Form::radio('status', '1', $event->status == 1); ?> Active
+                <?php echo Form::radio('status', $event->status == 0); ?> Not Active <br>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <?php echo Form::submit('Submit', array('class' => 'btn')); ?>
+
+        </td>
+    </tr>
+<?php echo Form::close(); ?>
+
+<?php if($errors->any()): ?>
+    <ul>
+        <?php echo implode('', $errors->all('<li class="error">:message</li>')); ?>
+
+    </ul>
+<?php endif; ?>
+  </table>
+  <script>
+  $(function() {
+    $('.datepicker').datepicker({
+        format: "yyyy/m/d",
+    });
+    $("#some-textarea").markdown();
+  });
+</script>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.admin', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

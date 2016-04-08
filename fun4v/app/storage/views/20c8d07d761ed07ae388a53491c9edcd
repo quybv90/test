@@ -1,0 +1,40 @@
+<?php $__env->startSection('content'); ?>
+<!-- reservation-information -->
+    <table class="table table-bordered">
+      <tr>
+        <th>Title</th>
+        <td colspan="2"><b><?php echo $event->title; ?></b></td>
+      </tr>
+      <tr>
+        <th>Content</th>
+        <td colspan="2" style="height: 400px;"><?php echo $event->content; ?></td>
+      </tr>
+      <tr>
+        <th>Start date</th>
+        <td colspan="2"><?php echo $event->started_date; ?></td>
+      </tr>
+      <tr>
+        <th>End date</th>
+        <td colspan="2"><?php echo $event->end_date; ?></td>
+      </tr>
+      <tr>
+        <th>status</th>
+        <td colspan="2"><?php echo $event->status; ?></td>
+      </tr>
+      <tr>
+        <th></th>
+        <td>
+          <?php echo link_to_route('admin.events.edit', 'Edit', array($event->id), array('class' => 'btn btn-info')); ?>
+
+        </td>
+        <td>
+          <?php echo Form::open(array('method' => 'DELETE', 'route' => array('admin.events.destroy', $event->id))); ?> 
+          <?php echo Form::submit('Delete', array('class' => 'btn btn-danger')); ?> 
+          <?php echo Form::close(); ?>
+
+        </td>
+      </tr>
+    </table>  
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.admin', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
